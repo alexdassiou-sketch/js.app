@@ -1,33 +1,125 @@
 <!DOCTYPE html>
-<html>
+<html lang="el">
 <head>
- <meta charset="UTF-8">
- <title>JS Semester Project</title>
+  <meta charset="UTF-8">
+  <title>JS Semester Project</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #0e0665;
+      padding: 20px;
+    }
+    h2 {
+      text-align: center;
+    }
+    .container {
+      max-width: 500px;
+      margin: auto;
+      background: #bff999;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    input, button {
+      width: calc(100% - 20px);
+      padding: 10px;
+      margin: 8px auto;
+      display: block;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      box-sizing: border-box;
+    }
+    ul {
+      margin-top: 20px;
+      padding: 0;
+      list-style: none;
+    }
+    li {
+      background: #eff7b8;
+      margin: 5px 0;
+      padding: 10px;
+      border-radius: 5px;
+    }
+  </style>
 </head>
 <body>
-    <h2>Καταγραφή Επισκεπτών</h2>
 
-    <input type="text" id="userName" placeholder="Όνομα">
-    <input type="number" id="userAge" placeholder="Ηλικία">
-    <button id="addBtn">Καταχώρηση</button>
-    
-    <hr>
+<div class="container">
+  <h2>Καταχώρηση Επισκεπτών</h2>
 
-    <h3>Λίστα Επισκεπτών:</h3>
-    
-    <ul id="displayList"></ul>
-     <p id="stats"></p>
-    
-    <script>
-    const addBtn = document.getElementById('addBtn');
-    // ΕΔΩ ΘΑ ΓΡΑΦΤΕΙ ΟΛΗ Η ΛΟΓΙΚΗ (JS)
-    let guests = []; // Ο πίνακας που θα αποθηκεύει τα Objects
-    // 1. Επιλογή στοιχείων με Query Selectors
-    // 2. Event Listener στο κουμπί
-    // 3. Συνάρτηση προσθήκης (addGuest)
-    // 4. Χρήση If για έλεγχο ηλικίας
-    // 5. Χρήση forEach για εμφάνιση στο 'displayList'
-    </script>
-    
+  <input type="text" id="userName" placeholder="Όνομα">
+  <input type="text" id="userAge" placeholder="Ηλικία">
+  <input type="text" id="userJob" placeholder="Ιδιότητα">
+  
+  <button id="addBtn">Εγγραφή</button>
+
+  <ul id="list"></ul>
+</div>
+
+<script>
+  const nameInput = document.getElementById('userName');
+  const ageInput = document.getElementById('userAge');
+  const jobInput = document.getElementById('userJob');
+  const addBtn = document.getElementById('addBtn');
+  const list = document.getElementById('list');
+
+  let guests = [];
+
+  addBtn.addEventListener('click', addGuest);
+
+  function addGuest() {
+    let nameVar = nameInput.value;
+    let ageVar = ageInput.value;
+    let jobVar = jobInput.value;
+
+    if (!nameVar) {
+      alert('Το όνομα δεν μπορεί να είναι κενό!');
+      return;
+    }
+
+    if (!ageVar || !jobVar) {
+      alert('Παρακαλώ συμπλήρωσε όλα τα πεδία!');
+      return;
+    }
+
+    if (isNaN(ageVar)) {
+      alert('Η ηλικία πρέπει να είναι αριθμός!');
+      return;
+    }
+
+    ageVar = Number(ageVar);
+
+    let isAdult = ageVar >= 18;
+
+    const person = {
+      name: nameVar,
+      age: ageVar,
+      job: jobVar,
+      adult: isAdult
+    };
+
+    guests.push(person);
+
+    displayList();
+
+    nameInput.value = '';
+    ageInput.value = '';
+    jobInput.value = '';
+  }
+
+  function displayList() {
+    list.innerHTML = '';
+
+    guests.forEach((guest, index) => {
+      const li = document.createElement('li');
+
+      let status = guest.adult ? 'Ενήλικας' : 'Ανήλικος';
+
+      li.textContent = `${index + 1}. ${guest.name} (${status}) - Ηλικία: ${guest.age}, Ιδιότητα: ${guest.job}`;
+      list.appendChild(li);
+    });
+  }
+</script>
+
 </body>
 </html>
